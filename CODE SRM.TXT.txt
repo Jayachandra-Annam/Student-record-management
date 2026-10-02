@@ -1,0 +1,328 @@
+#includestdio.h
+#includestdlib.h
+#includestring.h
+#includeunistd.h
+
+typedef struct student
+{
+    int rollno;
+    char name[20];
+    float percentage;
+    struct student next;
+} SLL;
+
+void Addnewrecord(SLL );
+void Showthelist(SLL );
+void Saverecords(SLL );
+void Deletearecord(SLL );
+void Deleteallrecords(SLL );
+void Modifyrecords(SLL );
+void Reversethelist(SLL );
+void Sortthelist(SLL );
+
+int main()
+{
+    SLL headptr=0;
+    char op;
+
+    while(1)
+    {
+        printf(Enter the optionn);
+        printf(A)Addnewrecord D)Deletearecord S)Showthelist M)Modifyarecord V)Saverecords E)Exit T)Sortthelist L)Deletealltherecords R)Reversethelistn);
+
+        scanf( %c,&op);
+
+        switch(op)
+        {
+            case 'A'
+            case 'a'
+                Addnewrecord(&headptr);
+                break;
+
+            case 'S'
+            case 's'
+                Showthelist(headptr);
+                break;
+
+            case 'V'
+            case 'v'
+                Saverecords(headptr);
+                break;
+
+            case 'D'
+            case 'd'
+                Deletearecord(&headptr);
+                break;
+
+            case 'L'
+            case 'l'
+                Deleteallrecords(&headptr);
+                break;
+
+            case 'M'
+            case 'm'
+                Modifyrecords(headptr);
+                break;
+
+            case 'R'
+            case 'r'
+                Reversethelist(&headptr);
+                break;
+
+            case 'T'
+            case 't'
+                Sortthelist(headptr);
+                break;
+
+            case 'E'
+            case 'e'
+                exit(0);
+
+            default
+                printf(Invalid optionn);
+        }
+    }
+}
+
+void Addnewrecord(SLL ptr)
+{
+    SLL newnode, temp;
+    int roll=1;
+    int flag;
+
+    newnode = malloc(sizeof(SLL));
+
+    while(1)
+    {
+        flag=0;
+        temp=ptr;
+
+        while(temp)
+        {
+            if(temp-rollno==roll)
+            {
+                flag=1;
+                break;
+            }
+
+            temp=temp-next;
+        }
+
+        if(flag==0)
+            break;
+
+        roll++;
+    }
+
+    newnode-rollno=roll;
+
+    printf(Enter Name and Percetagen );
+    scanf(%s%f,newnode-name,&newnode-percentage);
+
+    newnode-next=ptr;
+    ptr=newnode;
+}
+
+void Showthelist(SLL ptr)
+{
+    if(ptr==0)
+    {
+        printf(No records foundn);
+        return;
+    }
+
+    printf(n);
+    printf(Rollno  Name  Marksn);
+    printf(n);
+
+    while(ptr)
+    {
+        printf(%d %s %fn,ptr-rollno,ptr-name,ptr-percentage);
+
+        ptr=ptr-next;
+    }
+}
+
+void Saverecords(SLL ptr)
+{
+    FILE fp=fopen(student.txt,w);
+
+    while(ptr)
+    {
+        fprintf(fp,%d %s %fn,ptr-rollno,ptr-name,ptr-percentage);
+
+        ptr=ptr-next;
+    }
+
+    printf(Data saved in a filen);
+
+    fclose(fp);
+}
+
+void Deleteallrecords(SLL ptr)
+{
+    if(ptr==0)
+    {
+        printf(NO records foundn);
+        return;
+    }
+
+    SLL del=ptr;
+
+    while(del)
+    {
+        ptr=del-next;
+        free(del);
+        del=ptr;
+    }
+
+    printf(Deleted all records....n);
+}
+
+void Deletearecord(SLL ptr)
+{
+    if(ptr==0)
+    {
+        printf(No records foundn);
+        return;
+    }
+
+    SLL del=ptr,prev;
+    int op;
+
+    printf(Enter rollno to deleten);
+    scanf(%d,&op);
+
+    while(del)
+    {
+        if(op==del-rollno)
+        {
+            if(ptr==del)
+                ptr=del-next;
+            else
+                prev-next=del-next;
+
+            free(del);
+            return;
+        }
+
+        prev=del;
+        del=del-next;
+    }
+
+    printf(Rollno not found....n);
+}
+
+void Reversethelist(SLL ptr)
+{
+    if(ptr==0)
+    {
+        printf(no recoreds foundn);
+        return;
+    }
+
+    SLL a,t=ptr,temp=ptr;
+    int i,c=0;
+
+    while(temp)
+    {
+        c++;
+        temp=temp-next;
+    }
+
+    if(c1)
+    {
+        a=malloc(sizeof(SLL )c);
+
+        for(i=0;ic;i++)
+        {
+            a[i]=t;
+            t=t-next;
+        }
+
+        for(i=c-1;i=0;i--)
+            a[i]-next=a[i-1];
+
+        a[0]-next=0;
+        ptr=a[c-1];
+    }
+}
+
+void Modifyrecords(SLL ptr)
+{
+    if(ptr==0)
+    {
+        printf(no records foundn);
+        return;
+    }
+
+    printf(enter rollno to modify);
+
+    int op,f=0;
+
+    scanf(%d,&op);
+
+    while(ptr)
+    {
+        if(op==ptr-rollno)
+        {
+            printf(%d %s %fn,ptr-rollno,ptr-name,ptr-percentage);
+
+            printf(enter name and percentage to modifyn);
+
+            scanf(%s%f,ptr-name,&ptr-percentage);
+
+            f=1;
+        }
+
+        ptr=ptr-next;
+    }
+
+    if(f==0)
+        printf(rollno not foundn);
+}
+
+void Sortthelist(SLL ptr)
+{
+    if(ptr==0)
+    {
+        printf(no records foundn);
+        return;
+    }
+
+    SLL t,p1=ptr,p2,temp=ptr;
+    int i,j,c=0;
+
+    while(temp)
+    {
+        c++;
+        temp=temp-next;
+    }
+
+    for(i=0;ic-1;i++)
+    {
+        p2=p1-next;
+
+        for(j=0;jc-1-i;j++)
+        {
+            if(strcmp(p1-name,p2-name)0)
+            {
+                t.rollno=p1-rollno;
+                strcpy(t.name,p1-name);
+                t.percentage=p1-percentage;
+
+                p1-rollno=p2-rollno;
+                strcpy(p1-name,p2-name);
+                p1-percentage=p2-percentage;
+
+                p2-rollno=t.rollno;
+                strcpy(p2-name,t.name);
+                p2-percentage=t.percentage;
+            }
+
+            p2=p2-next;
+        }
+
+        p1=p1-next;
+    }
+}
